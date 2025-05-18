@@ -1,0 +1,31 @@
+2025-05-14 00:58:44,582 - WARNING - Module pystray not found. Some features may be disabled.
+2025-05-14 00:59:33,217 - INFO - Starting UI application
+2025-05-14 00:59:33,536 - ERROR - Error starting application: name 'Callable' is not defined
+2025-05-14 00:59:51,907 - INFO - Starting UI application
+2025-05-14 00:59:51,925 - ERROR - Error starting application: name 'Callable' is not defined
+2025-05-14 02:23:08,958 - WARNING - Module matplotlib not found. Some features may be disabled.
+2025-05-14 02:23:08,958 - WARNING - Module psutil not found. Some features may be disabled.
+2025-05-14 02:23:08,959 - WARNING - Module pystray not found. Some features may be disabled.
+2025-05-14 02:23:08,960 - WARNING - Module numpy not found. Some features may be disabled.
+2025-05-14 02:23:08,961 - WARNING - Module sklearn not found. Some features may be disabled.
+2025-05-14 02:23:08,962 - WARNING - Module pandas not found. Some features may be disabled.
+2025-05-14 02:23:08,963 - WARNING - Module cryptography not found. Some features may be disabled.
+2025-05-14 02:23:08,964 - WARNING - Module requests not found. Some features may be disabled.
+2025-05-14 02:23:08,964 - WARNING - Missing optional dependencies: matplotlib, psutil, pystray, numpy, sklearn, pandas, cryptography, requests
+2025-05-14 02:23:08,966 - ERROR - Error showing splash screen: No module named 'PIL'
+2025-05-14 02:23:08,977 - INFO - Starting UI application
+2025-05-14 02:23:09,074 - WARNING - psutil not available. Memory optimization functions will be limited.
+2025-05-14 02:23:09,084 - WARNING - Windows-specific modules not available. Some features will be disabled.
+2025-05-18 01:38:04,160 - WARNING - Module matplotlib not found. Some features may be disabled.
+2025-05-18 01:38:04,161 - WARNING - Module psutil not found. Some features may be disabled.
+2025-05-18 01:38:04,162 - WARNING - Module pystray not found. Some features may be disabled.
+2025-05-18 01:38:04,162 - WARNING - Module numpy not found. Some features may be disabled.
+2025-05-18 01:38:04,164 - WARNING - Module sklearn not found. Some features may be disabled.
+2025-05-18 01:38:04,165 - WARNING - Module pandas not found. Some features may be disabled.
+2025-05-18 01:38:04,166 - WARNING - Module cryptography not found. Some features may be disabled.
+2025-05-18 01:38:04,167 - WARNING - Module requests not found. Some features may be disabled.
+2025-05-18 01:38:04,167 - WARNING - Missing optional dependencies: matplotlib, psutil, pystray, numpy, sklearn, pandas, cryptography, requests
+2025-05-18 01:38:04,168 - ERROR - Error showing splash screen: No module named 'PIL'
+2025-05-18 01:38:04,179 - INFO - Starting UI application
+2025-05-18 01:38:04,228 - WARNING - psutil not available. Memory optimization functions will be limited.
+2025-05-18 01:38:04,236 - WARNING - Windows-specific modules not available. Some features will be disabled.
