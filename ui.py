@@ -34,18 +34,31 @@ except ImportError:
     SYSTEM_TRAY_AVAILABLE = False
     logging.warning("System tray module not available. System tray icon will be disabled.")
 
-# Colors for futuristic theme
+# Colors for clean and futuristic theme
 class FuturisticTheme:
-    DARK_BG = "#1E1E2E"      # Dark background
-    LIGHT_BG = "#2A2A3C"     # Lighter background for contrast
-    ACCENT = "#7B68EE"       # Vibrant purple accent
-    ACCENT_HOVER = "#9370DB" # Lighter accent for hover states
-    TEXT = "#FFFFFF"         # White text
-    TEXT_MUTED = "#AAAAAA"   # Muted text for less important info
-    SUCCESS = "#50FA7B"      # Neon green for success messages
-    WARNING = "#FFB86C"      # Amber for warnings
-    ERROR = "#FF5555"        # Red for errors
-    BORDER = "#4A4A5E"       # Subtle border color
+    # Main backgrounds
+    DARK_BG = "#0F1624"      # Deep space blue background
+    LIGHT_BG = "#1A2332"     # Lighter space blue for contrast
+    
+    # Accent colors
+    ACCENT = "#64FFDA"       # Bright teal accent - main brand color
+    ACCENT_HOVER = "#00E5FF" # Cyan for hover states
+    ACCENT_ALT = "#4D69FF"   # Electric blue for secondary accents
+    
+    # Text colors
+    TEXT = "#F2F5FF"         # Soft white text for better eye comfort
+    TEXT_MUTED = "#B3C5EF"   # Soft blue-gray for secondary text
+    
+    # Status colors
+    SUCCESS = "#00E676"      # Vibrant green for success messages
+    WARNING = "#FFEA00"      # Bright yellow for warnings
+    ERROR = "#FF5252"        # Coral red for errors
+    
+    # UI elements
+    BORDER = "#2E3A50"       # Subtle border with blue undertones
+    CARD_BG = "#141F35"      # Slightly lighter than main bg for cards
+    GRADIENT_START = "#0F1624" # For gradient effects - matches DARK_BG
+    GRADIENT_END = "#253555"   # Gradient end - royal blue tone
 
 # Add a fallback implementation for TempFileFinder if it's not working
 class FallbackTempFileFinder:
@@ -147,9 +160,10 @@ class FallbackTempFileFinder:
 class TempFileCleanerUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("Ultra Temp Cleaner Pro")
+        self.root.title("CleanX - Advanced System Cleaner")
         # Make window smaller but still functional
         self.root.geometry("1000x650")
+        self.root.minsize(800, 600)  # Set minimum window size
         self.root.configure(bg=FuturisticTheme.DARK_BG)
         
         # Add window icon - you would need to create this file
@@ -157,6 +171,13 @@ class TempFileCleanerUI:
             self.root.iconbitmap("assets/cleaner_icon.ico")
         except:
             pass  # If icon file doesn't exist, just continue
+        
+        # Add drop shadow effect to window on Windows if possible
+        if os.name == 'nt':
+            try:
+                self.root.attributes('-alpha', 0.95)  # Slight transparency for modern look
+            except:
+                pass
 
         # Configure row and column weights for proper resizing
         self.root.grid_rowconfigure(0, weight=1)
@@ -202,129 +223,251 @@ class TempFileCleanerUI:
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         
     def apply_theme(self):
+        # Set the window icon and configure the root window
+        self.root.configure(background=FuturisticTheme.DARK_BG)
+        
+        # Try to use a modern font if available
+        preferred_fonts = ['Segoe UI', 'Roboto', 'SF Pro Display', 'Arial', 'Helvetica']
+        available_font = None
+        for font in preferred_fonts:
+            try:
+                tk.font.Font(family=font, size=10)  # Test if font is available
+                available_font = font
+                break
+            except:
+                continue
+        
+        if not available_font:
+            available_font = 'TkDefaultFont'  # Fallback to default
+    
         # Create a custom theme
         style = ttk.Style()
         style.theme_create("futuristic", parent="alt", settings={
-            "TNotebook": {"configure": {"background": FuturisticTheme.DARK_BG, "tabmargins": [2, 5, 2, 0]}},
+            # Notebook (Tabs)
+            "TNotebook": {"configure": {
+                "background": FuturisticTheme.DARK_BG, 
+                "tabmargins": [2, 5, 2, 0],
+                "borderwidth": 0,
+                "tabposition": 'n'
+            }},
             "TNotebook.Tab": {
-                "configure": {
-                    "background": FuturisticTheme.LIGHT_BG,
-                    "foreground": FuturisticTheme.TEXT,
-                    "padding": [10, 4],
-                    "font": ('Segoe UI', 10, 'bold')
-                },
-                "map": {
-                    "background": [("selected", FuturisticTheme.ACCENT)],
-                    "foreground": [("selected", FuturisticTheme.TEXT)],
-                    "expand": [("selected", [1, 1, 1, 0])]
-                }
+            "configure": {
+                "background": FuturisticTheme.LIGHT_BG,
+                "foreground": FuturisticTheme.TEXT,
+                "padding": [15, 6],
+                "font": (available_font, 10, 'bold'),
+                "borderwidth": 0
             },
-            "TFrame": {"configure": {"background": FuturisticTheme.DARK_BG}},
-            "TLabelframe": {
-                "configure": {
-                    "background": FuturisticTheme.LIGHT_BG,
-                    "foreground": FuturisticTheme.TEXT,
-                    "borderwidth": 1,
-                    "relief": "groove"
-                }
-            },
-            "TLabelframe.Label": {
-                "configure": {
-                    "background": FuturisticTheme.LIGHT_BG,
-                    "foreground": FuturisticTheme.ACCENT,
-                    "font": ('Segoe UI', 10, 'bold')
-                }
-            },
-            "TButton": {
-                "configure": {
-                    "background": FuturisticTheme.ACCENT,
-                    "foreground": FuturisticTheme.TEXT,
-                    "padding": [10, 5],
-                    "font": ('Segoe UI', 9, 'bold')
-                },
-                "map": {
-                    "background": [("active", FuturisticTheme.ACCENT_HOVER)],
-                    "foreground": [("active", FuturisticTheme.TEXT)]
-                }
-            },
-            "TLabel": {
-                "configure": {
-                    "background": FuturisticTheme.DARK_BG,
-                    "foreground": FuturisticTheme.TEXT,
-                    "font": ('Segoe UI', 9)
-                }
-            },
-            "TRadiobutton": {
-                "configure": {
-                    "background": FuturisticTheme.LIGHT_BG,
-                    "foreground": FuturisticTheme.TEXT,
-                    "font": ('Segoe UI', 9)
-                }
-            },
-            "TCheckbutton": {
-                "configure": {
-                    "background": FuturisticTheme.LIGHT_BG,
-                    "foreground": FuturisticTheme.TEXT,
-                    "font": ('Segoe UI', 9)
-                }
-            },
-            "TCombobox": {
-                "configure": {
-                    "fieldbackground": FuturisticTheme.LIGHT_BG,
-                    "background": FuturisticTheme.ACCENT,
-                    "foreground": FuturisticTheme.TEXT,
-                    "selectbackground": FuturisticTheme.ACCENT,
-                    "selectforeground": FuturisticTheme.TEXT
-                }
-            },
-            "TEntry": {
-                "configure": {
-                    "fieldbackground": FuturisticTheme.LIGHT_BG,
-                    "foreground": FuturisticTheme.TEXT,
-                    "borderwidth": 1
-                }
-            },
-            "Treeview": {
-                "configure": {
-                    "background": FuturisticTheme.LIGHT_BG,
-                    "foreground": FuturisticTheme.TEXT,
-                    "rowheight": 25,
-                    "borderwidth": 0,
-                    "font": ('Segoe UI', 9)
-                },
-                "map": {
-                    "background": [("selected", FuturisticTheme.ACCENT)],
-                    "foreground": [("selected", FuturisticTheme.TEXT)]
-                }
-            },
-            "Treeview.Heading": {
-                "configure": {
-                    "background": FuturisticTheme.ACCENT,
-                    "foreground": FuturisticTheme.TEXT,
-                    "relief": "flat",
-                    "borderwidth": 0,
-                    "font": ('Segoe UI', 9, 'bold')
-                }
+            "map": {
+                "background": [("selected", FuturisticTheme.ACCENT)],
+                "foreground": [("selected", FuturisticTheme.TEXT)],
+                "expand": [("selected", [1, 1, 1, 0])]
             }
-        })
-        
-        style.theme_use("futuristic")
-        
-        # Additional style configurations for specific widgets
-        style.configure("Success.TButton", background=FuturisticTheme.SUCCESS)
-        style.map("Success.TButton", background=[("active", FuturisticTheme.SUCCESS)])
-        
-        style.configure("Warning.TButton", background=FuturisticTheme.WARNING)
-        style.map("Warning.TButton", background=[("active", FuturisticTheme.WARNING)])
-        
-        style.configure("Error.TButton", background=FuturisticTheme.ERROR)
-        style.map("Error.TButton", background=[("active", FuturisticTheme.ERROR)])
-        
-        # Configure listbox and other tk widgets
-        self.root.option_add("*TCombobox*Listbox.background", FuturisticTheme.LIGHT_BG)
-        self.root.option_add("*TCombobox*Listbox.foreground", FuturisticTheme.TEXT)
-        self.root.option_add("*TCombobox*Listbox.selectBackground", FuturisticTheme.ACCENT)
-        self.root.option_add("*TCombobox*Listbox.selectForeground", FuturisticTheme.TEXT)
+        },
+        # Frames
+        "TFrame": {"configure": {"background": FuturisticTheme.DARK_BG}},
+        "TLabelframe": {
+            "configure": {
+                "background": FuturisticTheme.CARD_BG,
+                "foreground": FuturisticTheme.TEXT,
+                "borderwidth": 1,
+                "relief": "solid",
+                "bordercolor": FuturisticTheme.BORDER
+            }
+        },
+        "TLabelframe.Label": {
+            "configure": {
+                "background": FuturisticTheme.CARD_BG,
+                "foreground": FuturisticTheme.ACCENT,
+                "font": (available_font, 10, 'bold')
+            }
+        },
+        # Buttons
+        "TButton": {
+            "configure": {
+                "background": FuturisticTheme.ACCENT,
+                "foreground": FuturisticTheme.DARK_BG,  # Dark text on light button for contrast
+                "padding": [12, 6],
+                "font": (available_font, 9, 'bold'),
+                "borderwidth": 0,
+                "relief": "flat"
+            },
+            "map": {
+                "background": [("active", FuturisticTheme.ACCENT_HOVER)],
+                "foreground": [("active", FuturisticTheme.DARK_BG)],
+                "relief": [("pressed", "flat")]
+            }
+        },
+        # Labels
+        "TLabel": {
+            "configure": {
+                "background": FuturisticTheme.DARK_BG,
+                "foreground": FuturisticTheme.TEXT,
+                "font": (available_font, 9)
+            }
+        },
+        # Radio buttons
+        "TRadiobutton": {
+            "configure": {
+                "background": FuturisticTheme.CARD_BG,
+                "foreground": FuturisticTheme.TEXT,
+                "font": (available_font, 9)
+            },
+            "map": {
+                "indicatorcolor": [("selected", FuturisticTheme.ACCENT)]
+            }
+        },
+        # Checkboxes
+        "TCheckbutton": {
+            "configure": {
+                "background": FuturisticTheme.CARD_BG,
+                "foreground": FuturisticTheme.TEXT,
+                "font": (available_font, 9)
+            },
+            "map": {
+                "indicatorcolor": [("selected", FuturisticTheme.ACCENT)]
+            }
+        },
+        # Dropdown menus
+        "TCombobox": {
+            "configure": {
+                "fieldbackground": FuturisticTheme.LIGHT_BG,
+                "background": FuturisticTheme.ACCENT_ALT,
+                "foreground": FuturisticTheme.TEXT,
+                "selectbackground": FuturisticTheme.ACCENT,
+                "selectforeground": FuturisticTheme.DARK_BG,
+                "padding": 5,
+                "arrowsize": 15
+            }
+        },
+        # Text entry fields
+        "TEntry": {
+            "configure": {
+                "fieldbackground": FuturisticTheme.LIGHT_BG,
+                "foreground": FuturisticTheme.TEXT,
+                "borderwidth": 1,
+                "padding": 5
+            }
+        },
+        # Tree views (lists)
+        "Treeview": {
+            "configure": {
+                "background": FuturisticTheme.CARD_BG,
+                "foreground": FuturisticTheme.TEXT,
+                "rowheight": 28,  # Slightly taller rows
+                "borderwidth": 0,
+                "font": (available_font, 9),
+                "fieldbackground": FuturisticTheme.CARD_BG
+            },
+            "map": {
+                "background": [("selected", FuturisticTheme.ACCENT_ALT)],
+                "foreground": [("selected", FuturisticTheme.TEXT)]
+            }
+        },
+        # Tree view headers
+        "Treeview.Heading": {
+            "configure": {
+                "background": FuturisticTheme.LIGHT_BG,
+                "foreground": FuturisticTheme.ACCENT,
+                "relief": "flat",
+                "borderwidth": 0,
+                "font": (available_font, 9, 'bold')
+            }
+        },
+        # Scrollbars
+        "Vertical.TScrollbar": {
+            "configure": {
+                "background": FuturisticTheme.CARD_BG,
+                "troughcolor": FuturisticTheme.DARK_BG,
+                "borderwidth": 0,
+                "arrowcolor": FuturisticTheme.ACCENT
+            },
+            "map": {
+                "background": [("active", FuturisticTheme.ACCENT_ALT)]
+            }
+        },
+        "Horizontal.TScrollbar": {
+            "configure": {
+                "background": FuturisticTheme.CARD_BG,
+                "troughcolor": FuturisticTheme.DARK_BG,
+                "borderwidth": 0,
+                "arrowcolor": FuturisticTheme.ACCENT
+            },
+            "map": {
+                "background": [("active", FuturisticTheme.ACCENT_ALT)]
+            }
+        }
+    })
+    
+    style.theme_use("futuristic")
+    
+    # Additional style configurations for specific widgets
+    style.configure("Success.TButton", 
+                    background=FuturisticTheme.SUCCESS, 
+                    foreground=FuturisticTheme.DARK_BG)
+    style.map("Success.TButton", 
+              background=[("active", FuturisticTheme.SUCCESS)],
+              foreground=[("active", FuturisticTheme.DARK_BG)])
+    
+    style.configure("Warning.TButton", 
+                    background=FuturisticTheme.WARNING, 
+                    foreground=FuturisticTheme.DARK_BG)
+    style.map("Warning.TButton", 
+              background=[("active", FuturisticTheme.WARNING)],
+              foreground=[("active", FuturisticTheme.DARK_BG)])
+    
+    style.configure("Error.TButton", 
+                    background=FuturisticTheme.ERROR, 
+                    foreground=FuturisticTheme.DARK_BG)
+    style.map("Error.TButton", 
+              background=[("active", FuturisticTheme.ERROR)],
+              foreground=[("active", FuturisticTheme.DARK_BG)])
+    
+    # Secondary button style with border instead of fill
+    style.configure("Secondary.TButton", 
+                    background=FuturisticTheme.DARK_BG,
+                    foreground=FuturisticTheme.ACCENT,
+                    borderwidth=1,
+                    bordercolor=FuturisticTheme.ACCENT,
+                    relief="solid")
+    style.map("Secondary.TButton",
+              background=[("active", FuturisticTheme.ACCENT_ALT)],
+              foreground=[("active", FuturisticTheme.TEXT)])
+    
+    # Card style for frame sections
+    style.configure("Card.TFrame", 
+                    background=FuturisticTheme.CARD_BG,
+                    borderwidth=1,
+                    relief="solid",
+                    bordercolor=FuturisticTheme.BORDER)
+    
+    # Header label style
+    style.configure("Header.TLabel",
+                    font=(available_font, 12, 'bold'),
+                    foreground=FuturisticTheme.ACCENT)
+    
+    # Subheader label style
+    style.configure("Subheader.TLabel",
+                    font=(available_font, 10, 'bold'),
+                    foreground=FuturisticTheme.TEXT)
+    
+    # Status label styles
+    style.configure("Success.TLabel", foreground=FuturisticTheme.SUCCESS)
+    style.configure("Warning.TLabel", foreground=FuturisticTheme.WARNING)
+    style.configure("Error.TLabel", foreground=FuturisticTheme.ERROR)
+    
+    # Configure listbox and other tk widgets
+    self.root.option_add("*TCombobox*Listbox.background", FuturisticTheme.CARD_BG)
+    self.root.option_add("*TCombobox*Listbox.foreground", FuturisticTheme.TEXT)
+    self.root.option_add("*TCombobox*Listbox.selectBackground", FuturisticTheme.ACCENT)
+    self.root.option_add("*TCombobox*Listbox.selectForeground", FuturisticTheme.DARK_BG)
+    
+    # Configure the main window
+    self.root.configure(bg=FuturisticTheme.DARK_BG)
+    
+    # Add some padding to all widgets for better spacing
+    for widget in ['TButton', 'TEntry', 'TLabel', 'TCheckbutton', 'TRadiobutton']:
+        style.configure(widget, padding=3)
         
     def setup_ui(self):
         # Create notebook for tabs
@@ -1188,7 +1331,7 @@ class TempFileCleanerUI:
         style = ttk.Style()
         style.theme_create("light", parent="alt", settings={
             "TNotebook": {"configure": {"background": "#FFFFFF", "tabmargins": [2, 5, 2, 0]}},
-            "TNotebook.Tab": {
+                "TNotebook.Tab": {
                 "configure": {
                     "background": "#F0F0F0",
                     "foreground": "#000000",
